@@ -16,7 +16,7 @@ type API struct {
 }
 
 func NewAPI(router *mux.Router) (*API, error) {
-	dbConn, err := db.InitDB() 
+	dbConn, err := db.InitDB()
 	if err != nil {
 		return nil, err
 	}
