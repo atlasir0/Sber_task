@@ -12,8 +12,8 @@ import (
 )
 
 const createTask = `-- name: CreateTask :one
-INSERT INTO tasks (title, description, date, completed) 
-VALUES ($1, $2, $3, $4) 
+INSERT INTO tasks (title, description, date, completed)
+VALUES ($1, $2, $3, $4)
 RETURNING id, title, description, date, completed
 `
 
@@ -43,7 +43,7 @@ func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) (Task, e
 }
 
 const deleteTask = `-- name: DeleteTask :exec
-DELETE FROM tasks 
+DELETE FROM tasks
 WHERE id = $1
 `
 
@@ -53,7 +53,8 @@ func (q *Queries) DeleteTask(ctx context.Context, id int32) error {
 }
 
 const getAllTasks = `-- name: GetAllTasks :many
-SELECT id, title, description, date, completed FROM tasks
+SELECT id, title, description, date, completed
+FROM tasks
 `
 
 func (q *Queries) GetAllTasks(ctx context.Context) ([]Task, error) {
@@ -85,9 +86,52 @@ func (q *Queries) GetAllTasks(ctx context.Context) ([]Task, error) {
 	return items, nil
 }
 
+const getPaginatedTasks = `-- name: GetPaginatedTasks :many
+SELECT id, title, description, date, completed
+FROM tasks
+WHERE completed = $1
+ORDER BY id
+OFFSET $2 LIMIT $3
+`
+
+type GetPaginatedTasksParams struct {
+	Completed bool
+	Offset    int32
+	Limit     int32
+}
+
+func (q *Queries) GetPaginatedTasks(ctx context.Context, arg GetPaginatedTasksParams) ([]Task, error) {
+	rows, err := q.db.QueryContext(ctx, getPaginatedTasks, arg.Completed, arg.Offset, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Task
+	for rows.Next() {
+		var i Task
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Description,
+			&i.Date,
+			&i.Completed,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getTaskByID = `-- name: GetTaskByID :one
-SELECT id, title, description, date, completed 
-FROM tasks 
+SELECT id, title, description, date, completed
+FROM tasks
 WHERE id = $1
 `
 
@@ -104,9 +148,49 @@ func (q *Queries) GetTaskByID(ctx context.Context, id int32) (Task, error) {
 	return i, err
 }
 
+const getTasksByDateAndStatus = `-- name: GetTasksByDateAndStatus :many
+SELECT id, title, description, date, completed
+FROM tasks
+WHERE date = $1 AND completed = $2
+`
+
+type GetTasksByDateAndStatusParams struct {
+	Date      time.Time
+	Completed bool
+}
+
+func (q *Queries) GetTasksByDateAndStatus(ctx context.Context, arg GetTasksByDateAndStatusParams) ([]Task, error) {
+	rows, err := q.db.QueryContext(ctx, getTasksByDateAndStatus, arg.Date, arg.Completed)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Task
+	for rows.Next() {
+		var i Task
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Description,
+			&i.Date,
+			&i.Completed,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateTask = `-- name: UpdateTask :exec
-UPDATE tasks 
-SET title = $1, description = $2, date = $3, completed = $4 
+UPDATE tasks
+SET title = $1, description = $2, date = $3, completed = $4
 WHERE id = $5
 `
 
