@@ -1,0 +1,6 @@
+version: "1"
+packages:
+  - name: db
+    path: internal/db
+    queries: "./internal/db/queries/queries.sql"
+    schema: "./internal/db/schema.sql"
