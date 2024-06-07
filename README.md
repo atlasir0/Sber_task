@@ -57,7 +57,7 @@ API предоставляет следующую функциональност
     ```
    
     ```example
-    GET /tasks/filter?date=2024-06-15T00:00:00Z&status=true
+    GET /tasks/paginated?page=1&limit=10&status=true
     ```
     
 - Получить список задач с фильтрацией по дате и статусу:
@@ -65,7 +65,7 @@ API предоставляет следующую функциональност
     GET /tasks/filter/{date}&{status}
     ```
     ```example
-    GET /tasks/paginated?page=1&limit=10&status=true
+    GET /tasks/filter?date=2024-06-15T00:00:00Z&status=true
     ```
     
 ## Докер образ
