@@ -53,7 +53,7 @@ API предоставляет следующую функциональност
     
 - Получить список задач с поддержкой пагинации:
     ```http
-    GET /tasks/paginated
+    GET /tasks/paginated/{page}&{limit}&{status}
     ```
    
     ```example
@@ -62,13 +62,12 @@ API предоставляет следующую функциональност
     
 - Получить список задач с фильтрацией по дате и статусу:
     ```http
-    GET /tasks/filter
+    GET /tasks/filter/{date}&{status}
     ```
-    
-
     ```example
     GET /tasks/paginated?page=1&limit=10&status=true
     ```
+    
 ## Докер образ
 Докер собирается командой 
 
