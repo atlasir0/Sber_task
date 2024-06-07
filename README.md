@@ -14,12 +14,12 @@ API предоставляет следующую функциональност
 
 ## Запуск
 
-4. **Запуск проекта:** 
+ **Запуск проекта:** 
     ```bash
-    docker-compose up
+    make run
     ```
 
-5. **Доступ к API:** 
+ **Доступ к API:** 
     После запуска проекта API будет доступно по адресу `http://localhost:8080`.
 
 ## Использование API
@@ -55,7 +55,7 @@ API предоставляет следующую функциональност
     ```http
     GET /tasks/paginated
     ```
-    
+example   
     ```example
     GET /tasks/filter?date=2024-06-15T00:00:00Z&status=true
     ```
@@ -65,6 +65,7 @@ API предоставляет следующую функциональност
     GET /tasks/filter
     ```
     
+example
     ```example
     GET /tasks/paginated?page=1&limit=10&status=true
     ```
