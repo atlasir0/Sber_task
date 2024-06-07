@@ -55,7 +55,7 @@ API предоставляет следующую функциональност
     ```http
     GET /tasks/paginated
     ```
-example   
+   
     ```example
     GET /tasks/filter?date=2024-06-15T00:00:00Z&status=true
     ```
@@ -65,7 +65,7 @@ example
     GET /tasks/filter
     ```
     
-example
+
     ```example
     GET /tasks/paginated?page=1&limit=10&status=true
     ```
