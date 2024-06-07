@@ -14,10 +14,4 @@ run:
 clean:
 	rm -rf $(BUILD_DIR)
 
-init:
-	mkdir -p docs internal/api
 
-generate-swagger:
-	swagger generate spec -o docs/swagger.yaml --scan-models
-
-.PHONY: build run clean init generate-swagger

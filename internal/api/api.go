@@ -2,7 +2,6 @@ package api
 
 import (
 	"database/sql"
-	"todolist/internal/db"
 	"todolist/internal/handlers_api"
 	"todolist/internal/repositories"
 	"todolist/internal/services"
@@ -15,11 +14,7 @@ type API struct {
 	Router *mux.Router
 }
 
-func NewAPI(router *mux.Router) (*API, error) {
-	dbConn, err := db.InitDB()
-	if err != nil {
-		return nil, err
-	}
+func NewAPI(router *mux.Router, dbConn *sql.DB) (*API, error) {
 	return &API{
 		DB:     dbConn,
 		Router: router,

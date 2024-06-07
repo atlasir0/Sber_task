@@ -1,16 +1,24 @@
-# syntax=docker/dockerfile:1
-FROM golang:1.18-alpine
+FROM golang:1.21.1-alpine AS builder
+
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
+COPY go.mod go.sum ./
+
 RUN go mod download
 
-COPY . ./
+COPY . .
 
-RUN go build -o /todo_list
+RUN go build -o main ./cmd/main.go
+
+FROM golang:1.21.1-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/main .
+
+COPY config.yaml ./
 
 EXPOSE 8080
 
-CMD [ "/todo_list" ]
+CMD ["./main"]

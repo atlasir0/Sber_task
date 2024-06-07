@@ -1,7 +1,4 @@
--- +migrate Up
--- SQL in section 'Up' is executed when this migration is applied
-
-CREATE TABLE IF NOT EXISTS to_do (
+CREATE TABLE IF NOT EXISTS tasks (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,

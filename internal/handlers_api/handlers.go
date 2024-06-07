@@ -6,31 +6,10 @@ import (
 	"strconv"
 	"time"
 	"todolist/internal/models"
-	"todolist/internal/services"
 
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 )
-
-func (h *TaskHandler) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/tasks/paginated", h.ListPaginatedTasks).Methods("GET")
-	router.HandleFunc("/tasks", h.CreateTask).Methods("POST")
-	router.HandleFunc("/tasks/filter", h.FilterTasksByDateAndStatus).Methods("GET")
-	router.HandleFunc("/tasks", h.ListTasks).Methods("GET")
-	router.HandleFunc("/tasks/{id}", h.GetTaskByID).Methods("GET")
-	router.HandleFunc("/tasks/{id}", h.UpdateTask).Methods("PUT")
-	router.HandleFunc("/tasks/{id}", h.DeleteTask).Methods("DELETE")
-}
-
-type TaskHandler struct {
-	TaskService *services.TaskService
-}
-
-func NewTaskHandler(taskService *services.TaskService) *TaskHandler {
-	return &TaskHandler{
-		TaskService: taskService,
-	}
-}
 
 func (h *TaskHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	var task models.Task
@@ -121,6 +100,7 @@ func (h *TaskHandler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
 func (h *TaskHandler) FilterTasksByDateAndStatus(w http.ResponseWriter, r *http.Request) {
 	logrus.Info("Inside FilterTasksByDateAndStatus function")
 
